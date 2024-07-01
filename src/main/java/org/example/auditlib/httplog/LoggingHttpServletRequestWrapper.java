@@ -1,4 +1,4 @@
-package org.example.auditlib;
+package org.example.auditlib.httplog;
 
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;

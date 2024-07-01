@@ -1,4 +1,4 @@
-package org.example.auditlib;
+package org.example.auditlib.httplog;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;

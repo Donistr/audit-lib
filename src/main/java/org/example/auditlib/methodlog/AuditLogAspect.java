@@ -1,4 +1,4 @@
-package org.example.auditlib;
+package org.example.auditlib.methodlog;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -26,7 +26,7 @@ public class AuditLogAspect {
      * @return возвращаемое значение метода
      * @throws Throwable если в логируемом методе произошло исключение
      */
-    @Around("@annotation(AuditLog)")
+    @Around("@annotation(org.example.auditlib.methodlog.AuditLog)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Level logLevel = signature.getMethod().getAnnotation(AuditLog.class).logLevel();

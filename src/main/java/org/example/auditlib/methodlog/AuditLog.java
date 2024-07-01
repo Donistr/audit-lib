@@ -1,4 +1,4 @@
-package org.example.auditlib;
+package org.example.auditlib.methodlog;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -32,7 +32,7 @@
                 </then>
             </if>
 
-            <logger name="org.example.auditlib.AuditLogAspect" additivity="false">
+            <logger name="org.example.auditlib.methodlog.AuditLogAspect" additivity="false">
                 <if condition='property("auditlib.methodlog.console-enabled").equals("true")'>
                     <then>
                         <appender-ref ref="CONSOLE" />
@@ -48,7 +48,7 @@
     </if>
     <if condition='property("auditlib.methodlog-enabled").equals("false")'>
         <then>
-            <logger name="org.example.auditlib.AuditLogAspect" additivity="false"/>
+            <logger name="org.example.auditlib.methodlog.AuditLogAspect" additivity="false"/>
         </then>
     </if>
 
@@ -68,7 +68,7 @@
                 </then>
             </if>
 
-            <logger name="org.example.auditlib.LoggingFilter" additivity="false">
+            <logger name="org.example.auditlib.httplog.LoggingFilter" additivity="false">
                 <if condition='property("auditlib.httplog.console-enabled").equals("true")'>
                     <then>
                         <appender-ref ref="CONSOLE" />
@@ -84,7 +84,7 @@
     </if>
     <if condition='property("auditlib.httplog-enabled").equals("false")'>
         <then>
-            <logger name="org.example.auditlib.LoggingFilter" additivity="false"/>
+            <logger name="org.example.auditlib.httplog.LoggingFilter" additivity="false"/>
         </then>
     </if>
 
