@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <springProperty scope="context" name="auditlib.methodlog-enabled" source="auditlib.methodlog-enabled" defaultValue="true"/>
-    <springProperty scope="context" name="auditlib.console-enabled" source="auditlib.console-enabled" defaultValue="true"/>
-    <springProperty scope="context" name="auditlib.file-enabled" source="auditlib.file-enabled" defaultValue="false"/>
-    <springProperty scope="context" name="auditlib.file-path" source="auditlib.file-path" defaultValue="logs/auditlib/methodlog"/>
+    <springProperty scope="context" name="auditlib.methodlog.console-enabled" source="auditlib.methodlog.console-enabled" defaultValue="true"/>
+    <springProperty scope="context" name="auditlib.methodlog.file-enabled" source="auditlib.methodlog.file-enabled" defaultValue="false"/>
+    <springProperty scope="context" name="auditlib.methodlog.file-path" source="auditlib.methodlog.file-path" defaultValue="logs/auditlib/methodlog"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -13,11 +13,11 @@
 
     <if condition='property("auditlib.methodlog-enabled").equals("true")'>
         <then>
-            <if condition='property("auditlib.file-enabled").equals("true")'>
+            <if condition='property("auditlib.methodlog.file-enabled").equals("true")'>
                 <then>
                     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
                         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                            <fileNamePattern>${auditlib.file-path}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                            <fileNamePattern>${auditlib.methodlog.file-path}.%d{yyyy-MM-dd}.log</fileNamePattern>
                             <maxHistory>30</maxHistory>
                         </rollingPolicy>
                         <encoder>
@@ -28,12 +28,12 @@
             </if>
 
             <logger name="org.example.auditlib.AuditLogAspect" additivity="false">
-                <if condition='property("auditlib.console-enabled").equals("true")'>
+                <if condition='property("auditlib.methodlog.console-enabled").equals("true")'>
                     <then>
                         <appender-ref ref="CONSOLE" />
                     </then>
                 </if>
-                <if condition='property("auditlib.file-enabled").equals("true")'>
+                <if condition='property("auditlib.methodlog.file-enabled").equals("true")'>
                     <then>
                         <appender-ref ref="FILE" />
                     </then>
