@@ -11,12 +11,21 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Parameter;
 
+/**
+ * Аспект, логирующий методы помеченные аннотацией {@link AuditLog}
+ */
 @Aspect
 @Component
 public class AuditLogAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuditLogAspect.class);
 
+    /**
+     * Логирует вызов метода: сигнатуру метода, что вернул метод или какая ошибка произошла при вызове метода
+     * @param joinPoint proceeding join point
+     * @return возвращаемое значение метода
+     * @throws Throwable если в логируемом методе произошло исключение
+     */
     @Around("@annotation(AuditLog)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -52,6 +61,13 @@ public class AuditLogAspect {
         return proceed;
     }
 
+    /**
+     * Создаёт сигнатуру метода
+     * @param returnType тип возвращаемого значения метода
+     * @param methodName название метода
+     * @param parameters параметры метода
+     * @return {@link StringBuilder}, который содержит собранную сигнатуру метода
+     */
     private static StringBuilder createMethodSignature(Class<?> returnType, String methodName, Parameter[] parameters) {
         StringBuilder messageBuilder = new StringBuilder()
                 .append(returnType.toString())
