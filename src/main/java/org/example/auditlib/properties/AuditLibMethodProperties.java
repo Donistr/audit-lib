@@ -5,11 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "auditlib.methodlog")
 public class AuditLibMethodProperties {
 
-    private boolean consoleEnabled;
+    private boolean consoleEnabled = true;
 
-    private boolean fileEnabled;
+    private boolean fileEnabled = false;
 
-    private String filepath;
+    private String filePath = "logs/auditlib/methodlog";
 
     public boolean isConsoleEnabled() {
         return consoleEnabled;
@@ -27,12 +27,12 @@ public class AuditLibMethodProperties {
         this.fileEnabled = fileEnabled;
     }
 
-    public String getMethodlogFilePath() {
-        return filepath;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setMethodlogFilePath(String methodlogFilePath) {
-        this.filepath = methodlogFilePath;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
 }

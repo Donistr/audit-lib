@@ -5,9 +5,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "auditlib")
 public class AuditLibBaseProperties {
 
-    private boolean methodlogEnabled;
+    private boolean methodlogEnabled = true;
 
-    private boolean httplogEnabled;
+    private boolean httplogEnabled = false;
 
     public boolean isMethodlogEnabled() {
         return methodlogEnabled;

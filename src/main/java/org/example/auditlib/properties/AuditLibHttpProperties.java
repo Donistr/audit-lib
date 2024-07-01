@@ -5,11 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "auditlib.httplog")
 public class AuditLibHttpProperties {
 
-    private boolean consoleEnabled;
+    private boolean consoleEnabled = true;
 
-    private boolean fileEnabled;
+    private boolean fileEnabled = false;
 
-    private String filePath;
+    private String filePath = "logs/auditlib/httplog";
 
     public boolean isConsoleEnabled() {
         return consoleEnabled;
