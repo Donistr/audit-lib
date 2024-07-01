@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * Бин, логирующий все входящие http запросы
+ */
 @Component
 public class LoggingFilter implements Filter {
 
@@ -21,6 +24,15 @@ public class LoggingFilter implements Filter {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    /**
+     * Оборачивает request и response в обёртки (чтобы можно было получить тело), выполняет запрос и логирует результат
+     * @param servletRequest http request
+     * @param servletResponse http response
+     * @param filterChain класс для передачи запроса следующему фильтру
+     * @throws IOException если ошибка при создании {@link LoggingHttpServletRequestWrapper}
+     * или {@link LoggingHttpServletResponseWrapper}
+     * @throws ServletException если ошибка при обработке запроса
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
