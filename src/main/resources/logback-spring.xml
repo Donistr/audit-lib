@@ -5,6 +5,11 @@
     <springProperty scope="context" name="auditlib.methodlog.file-enabled" source="auditlib.methodlog.file-enabled" defaultValue="false"/>
     <springProperty scope="context" name="auditlib.methodlog.file-path" source="auditlib.methodlog.file-path" defaultValue="logs/auditlib/methodlog"/>
 
+    <springProperty scope="context" name="auditlib.httplog-enabled" source="auditlib.httplog-enabled" defaultValue="false"/>
+    <springProperty scope="context" name="auditlib.httplog.console-enabled" source="auditlib.httplog.console-enabled" defaultValue="true"/>
+    <springProperty scope="context" name="auditlib.httplog.file-enabled" source="auditlib.httplog.file-enabled" defaultValue="false"/>
+    <springProperty scope="context" name="auditlib.httplog.file-path" source="auditlib.httplog.file-path" defaultValue="logs/auditlib/httplog"/>
+
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg%n</pattern>
@@ -17,7 +22,7 @@
                 <then>
                     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
                         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                            <fileNamePattern>${auditlib.methodlog.file-path}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                            <fileNamePattern>${auditlib.methodlog.file-path}/%d{yyyy-MM-dd}.log</fileNamePattern>
                             <maxHistory>30</maxHistory>
                         </rollingPolicy>
                         <encoder>
@@ -44,6 +49,42 @@
     <if condition='property("auditlib.methodlog-enabled").equals("false")'>
         <then>
             <logger name="org.example.auditlib.AuditLogAspect" additivity="false"/>
+        </then>
+    </if>
+
+    <if condition='property("auditlib.httplog-enabled").equals("true")'>
+        <then>
+            <if condition='property("auditlib.httplog.file-enabled").equals("true")'>
+                <then>
+                    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                            <fileNamePattern>${auditlib.httplog.file-path}/%d{yyyy-MM-dd}.log</fileNamePattern>
+                            <maxHistory>30</maxHistory>
+                        </rollingPolicy>
+                        <encoder>
+                            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                        </encoder>
+                    </appender>
+                </then>
+            </if>
+
+            <logger name="org.example.auditlib.LoggingFilter" additivity="false">
+                <if condition='property("auditlib.httplog.console-enabled").equals("true")'>
+                    <then>
+                        <appender-ref ref="CONSOLE" />
+                    </then>
+                </if>
+                <if condition='property("auditlib.httplog.file-enabled").equals("true")'>
+                    <then>
+                        <appender-ref ref="FILE" />
+                    </then>
+                </if>
+            </logger>
+        </then>
+    </if>
+    <if condition='property("auditlib.httplog-enabled").equals("false")'>
+        <then>
+            <logger name="org.example.auditlib.LoggingFilter" additivity="false"/>
         </then>
     </if>
 
