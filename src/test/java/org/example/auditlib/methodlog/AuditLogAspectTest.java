@@ -45,7 +45,7 @@ public class AuditLogAspectTest {
     @Mock
     Parameter parameter2;
 
-    ListAppender<ILoggingEvent> listAppender;
+    ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
 
     @BeforeEach
     public void mockObjects() {
@@ -58,7 +58,7 @@ public class AuditLogAspectTest {
         Mockito.when(method.getParameters()).thenReturn(new Parameter[]{parameter1, parameter2});
 
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-        listAppender = (ListAppender<ILoggingEvent>) context.getLogger(AuditLogAspect.class).getAppender("TEST");
+        context.getLogger(AuditLogAspect.class).addAppender(listAppender);
         listAppender.start();
     }
 
@@ -91,7 +91,7 @@ public class AuditLogAspectTest {
     }
 
     private String getLastLogMessage() {
-        return listAppender.list.get(0).getFormattedMessage();
+        return listAppender.list.get(listAppender.list.size() - 1).getFormattedMessage();
     }
 
 }
