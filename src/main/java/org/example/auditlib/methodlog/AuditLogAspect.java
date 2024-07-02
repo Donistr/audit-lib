@@ -37,9 +37,17 @@ public class AuditLogAspect {
 
         StringBuilder messageBuilder = createMethodSignature(returnType, methodName, parameters);
 
-        Object proceed;
         try {
-            proceed = joinPoint.proceed();
+            Object proceed = joinPoint.proceed();
+
+            if (returnType != void.class) {
+                messageBuilder
+                        .append("returned: ")
+                        .append(proceed);
+            }
+            LOGGER.atLevel(logLevel).log(messageBuilder.toString());
+
+            return proceed;
         } catch (Throwable e) {
             messageBuilder
                     .append("failed with error(")
@@ -50,15 +58,6 @@ public class AuditLogAspect {
 
             throw e;
         }
-
-        if (signature.getReturnType() != void.class) {
-            messageBuilder
-                    .append("returned: ")
-                    .append(proceed);
-        }
-        LOGGER.atLevel(logLevel).log(messageBuilder.toString());
-
-        return proceed;
     }
 
     /**
