@@ -5,6 +5,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,6 +62,11 @@ public class AuditLogAspectTest {
         listAppender.start();
     }
 
+    @AfterEach
+    public void clearListAppender() {
+        listAppender.list.clear();
+    }
+
     @Test
     public void testMethodLoggingReturnValue() throws Throwable {
         Mockito.when(joinPoint.proceed()).thenReturn(1234);
@@ -85,7 +91,7 @@ public class AuditLogAspectTest {
     }
 
     private String getLastLogMessage() {
-        return listAppender.list.get(listAppender.list.size() - 1).getFormattedMessage();
+        return listAppender.list.get(0).getFormattedMessage();
     }
 
 }
