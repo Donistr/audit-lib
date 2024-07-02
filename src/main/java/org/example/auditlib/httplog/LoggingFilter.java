@@ -1,6 +1,5 @@
 package org.example.auditlib.httplog;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -22,8 +21,6 @@ public class LoggingFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingFilter.class);
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
     /**
      * Оборачивает request и response в обёртки (чтобы можно было получить тело), выполняет запрос и логирует результат
      * @param servletRequest http request
@@ -43,14 +40,14 @@ public class LoggingFilter implements Filter {
 
         filterChain.doFilter(httpRequest, httpResponse);
 
-        String requestBody = OBJECT_MAPPER.writeValueAsString(OBJECT_MAPPER.readTree(httpRequest.getRequestBody()));
+        String requestBody = httpRequest.getRequestBody().replaceAll("\\s+", "");
         String responseBody = httpResponse.getResponseBody();
 
         StringBuilder stringBuilder = new StringBuilder()
                 .append("endpoint: ").append(httpRequest.getRequestURI()).append(" | ")
                 .append("method: ").append(httpRequest.getMethod()).append(" | ")
                 .append("request body: ");
-        if (requestBody == null || requestBody.isEmpty()) {
+        if (requestBody.isEmpty()) {
             stringBuilder.append("empty | ");
         } else {
             stringBuilder.append(requestBody).append(" | ");
