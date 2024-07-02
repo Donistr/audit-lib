@@ -16,6 +16,12 @@
     <name>auditlib</name>
     <description>auditlib</description>
 
+    <properties>
+        <meaven.compiler.source>17</meaven.compiler.source>
+        <meaven.compiler.target>17</meaven.compiler.target>
+        <java.version>17</java.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
