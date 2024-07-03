@@ -26,10 +26,10 @@ public class AuditLogAspect {
      * @return возвращаемое значение метода
      * @throws Throwable если в логируемом методе произошло исключение
      */
-    @Around("@annotation(org.example.auditlib.methodlog.AuditLog)")
-    public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around(value = "@annotation(auditLog)")
+    public Object logExecutionTime(ProceedingJoinPoint joinPoint, AuditLog auditLog) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Level logLevel = signature.getMethod().getAnnotation(AuditLog.class).logLevel();
+        Level logLevel = auditLog.logLevel();
 
         Class<?> returnType = signature.getReturnType();
         String methodName = signature.getDeclaringTypeName() + "." + signature.getName();
@@ -37,9 +37,17 @@ public class AuditLogAspect {
 
         StringBuilder messageBuilder = createMethodSignature(returnType, methodName, parameters);
 
-        Object proceed;
         try {
-            proceed = joinPoint.proceed();
+            Object proceed = joinPoint.proceed();
+
+            if (returnType != void.class) {
+                messageBuilder
+                        .append("returned: ")
+                        .append(proceed);
+            }
+            LOGGER.atLevel(logLevel).log(messageBuilder.toString());
+
+            return proceed;
         } catch (Throwable e) {
             messageBuilder
                     .append("failed with error(")
@@ -50,15 +58,6 @@ public class AuditLogAspect {
 
             throw e;
         }
-
-        if (signature.getReturnType() != void.class) {
-            messageBuilder
-                    .append("returned: ")
-                    .append(proceed);
-        }
-        LOGGER.atLevel(logLevel).log(messageBuilder.toString());
-
-        return proceed;
     }
 
     /**
